@@ -62,7 +62,7 @@
         <div class="badge" style="background:#7f1d1d; color:#ef4444;" id="vencidos">VENCIDOS: 0</div>
     </div>
     <div id="lista-competencias"></div>
-    <button class="btn-cerrar" onclick="location.reload()">Cerrar Perfil</button>
+    <button class="btn-cerrar" onclick="cerrarSesion()">Cerrar Perfil</button>
 </div>
 
 <script>
@@ -74,23 +74,23 @@
         { nombre: "Izaje / Rigger", fecha: "2025-09-12" }
     ];
 
-    // Al cargar la página, verificamos si hay una sesión válida de 30 min
     window.onload = function() {
-        const sesionGuardada = localStorage.getItem('sesionNFC');
-        if (sesionGuardada) {
-            const tiempoTranscurrido = (Date.now() - parseInt(sesionGuardada)) / 1000 / 60;
-            if (tiempoTranscurrido < 30) {
-                mostrarContenido();
-            }
+        const sesion = localStorage.getItem('sesionNFC');
+        if (sesion && (Date.now() - parseInt(sesion)) < (30 * 60 * 1000)) {
+            mostrarContenido();
         }
     };
 
     function validar() {
         if(document.getElementById('pin').value === "1234") {
-            // Guardamos el momento exacto en localStorage para que persista al cerrar el navegador
             localStorage.setItem('sesionNFC', Date.now());
             mostrarContenido();
         } else { alert("Clave incorrecta"); }
+    }
+
+    function cerrarSesion() {
+        localStorage.removeItem('sesionNFC');
+        location.reload();
     }
 
     function mostrarContenido() {
@@ -103,7 +103,7 @@
         const hoy = new Date(); hoy.setHours(0,0,0,0);
         let v = 0, venc = 0;
         let container = document.getElementById('lista-competencias');
-        container.innerHTML = ""; // Limpiar antes de renderizar
+        container.innerHTML = "";
         
         comps.forEach(c => {
             let f = new Date(c.fecha);
@@ -128,6 +128,5 @@
         document.getElementById('vencidos').innerText = "VENCIDOS: " + venc;
     }
 </script>
-
 </body>
 </html>
