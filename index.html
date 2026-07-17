@@ -12,6 +12,43 @@
             padding: 20px; 
             margin: 0;
         }
+        .session-banner {
+            background-color: #0b4a2e;
+            color: #2ecc71;
+            padding: 12px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 25px;
+        }
+        .profile-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .profile-avatar {
+            background-color: #222e42;
+            font-size: 45px;
+            width: 75px;
+            height: 75px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 16px;
+            margin-right: 15px;
+        }
+        .profile-name {
+            font-size: 24px;
+            color: #ffffff;
+            font-weight: bold;
+            margin-bottom: 4px;
+        }
+        .profile-role {
+            font-size: 14px;
+            color: #5BA8DC;
+            font-weight: bold;
+        }
         .header-row { 
             display: flex; 
             justify-content: space-between; 
@@ -39,7 +76,7 @@
         .counters { 
             display: flex; 
             gap: 10px; 
-            margin: 15px 0 20px 0; 
+            margin: 15px 0 15px 0; 
         }
         .badge-vigentes { 
             background-color: #0b4a2e; 
@@ -109,6 +146,18 @@
     </style>
 </head>
 <body>
+    <div class="session-banner">Sesión activa: Jefatura validada (Expira en 30:00)</div>
+
+    <div class="profile-header">
+        <div class="profile-avatar">👨‍🔧</div>
+        <div class="profile-info">
+            <div class="profile-name">Daniel Ahumada</div>
+            <div class="profile-role">Op. Grúa Horquilla</div>
+        </div>
+    </div>
+
+    <div class="divider"></div>
+
     <div class="header-row">
         <div class="header-col">
             <div class="label">RUT</div>
@@ -137,7 +186,7 @@
         <div class="badge-vencidos" id="contador-vencidos">VENCIDOS: 0</div>
     </div>
 
-    <div class="divider"></div>
+    <div class="divider" style="margin-top: 5px;"></div>
 
     <!-- Contenedor donde JavaScript inyectará las tarjetas -->
     <div id="lista-competencias"></div>
@@ -165,7 +214,7 @@
 
         const listaDiv = document.getElementById('lista-competencias');
         
-        // Obtenemos la fecha exacta de hoy y borramos las horas/minutos para que solo compare el día
+        // Obtenemos la fecha exacta de hoy (Julio 2026)
         const hoy = new Date();
         hoy.setHours(0, 0, 0, 0);
 
