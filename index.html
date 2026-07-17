@@ -17,7 +17,6 @@
         .counters { display: flex; gap: 10px; margin-bottom: 20px; }
         .badge { padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; }
         
-        /* Estilos de tarjetas según estado */
         .card { background-color: #222e42; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #10b981; }
         .card.vencido { border-left-color: #ef4444; }
         .card.por-vencer { border-left-color: #f59e0b; }
@@ -25,20 +24,10 @@
         .status { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; background: #064e3b; color: #10b981; }
         .status.vencido { background: #5c1a1a; color: #ef4444; }
         .status.por-vencer { background: #78350f; color: #f59e0b; }
-        
-        #bloqueo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d1421; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
     </style>
 </head>
 <body>
 
-<div id="bloqueo">
-    <h1>Acceso Restringido</h1>
-    <p>Ingrese clave de jefatura para visualizar el perfil.</p>
-    <input type="password" id="pin" maxlength="4" placeholder="••••" style="padding:15px; border-radius:8px; border:none; text-align:center; font-size:20px;">
-    <br><button onclick="validar()">Desbloquear Perfil</button>
-</div>
-
-<div id="contenido" style="display:none;">
     <div class="session-banner">Sesión activa: Jefatura validada (Expira en 30:00)</div>
     
     <div class="profile-header">
@@ -63,63 +52,42 @@
     </div>
 
     <div id="lista-competencias"></div>
-    <button class="btn-close" style="width:100%; padding:15px; border-radius:8px; border:none; margin-top:20px; cursor:pointer;" onclick="location.reload()">Cerrar Perfil</button>
-</div>
 
-<script>
-    const competencias = [
-        { nombre: "Examen Ocupacional", fecha: "2026-12-15" },
-        { nombre: "Licencia Interna", fecha: "2025-05-20" },
-        { nombre: "Trabajo en Altura", fecha: "2027-03-10" },
-        { nombre: "Uso de Extintores", fecha: "2026-08-01" },
-        { nombre: "Izaje / Rigger", fecha: "2025-09-12" }
-    ];
+    <script>
+        const competencias = [
+            { nombre: "Examen Ocupacional", fecha: "2026-12-15" },
+            { nombre: "Licencia Interna", fecha: "2025-05-20" },
+            { nombre: "Trabajo en Altura", fecha: "2027-03-10" },
+            { nombre: "Uso de Extintores", fecha: "2026-08-01" },
+            { nombre: "Izaje / Rigger", fecha: "2025-09-12" }
+        ];
 
-    function validar() {
-        if(document.getElementById('pin').value === "1234") {
-            document.getElementById('bloqueo').style.display = 'none';
-            document.getElementById('contenido').style.display = 'block';
-            renderizar();
-        } else { alert("Clave incorrecta"); }
-    }
-
-    function renderizar() {
         const hoy = new Date();
-        let vigentes = 0, vencidos = 0;
+        hoy.setHours(0,0,0,0);
+        let vCount = 0, vencCount = 0;
         let container = document.getElementById('lista-competencias');
-        
+
         competencias.forEach(c => {
             let fechaVenc = new Date(c.fecha);
-            let diasRestantes = Math.ceil((fechaVenc - hoy) / (1000 * 60 * 60 * 24));
+            let dias = Math.ceil((fechaVenc - hoy) / (1000 * 60 * 60 * 24));
             
-            let estadoClase = "";
-            let estadoTexto = "VIGENTE";
+            let clase = "", texto = "VIGENTE";
+            if (dias < 0) { clase = "vencido"; texto = "VENCIDO"; vencCount++; }
+            else if (dias <= 30) { clase = "por-vencer"; texto = "POR VENCER"; vCount++; }
+            else { vCount++; }
 
-            if (diasRestantes < 0) {
-                estadoClase = "vencido";
-                estadoTexto = "VENCIDO";
-                vencidos++;
-            } else if (diasRestantes <= 30) {
-                estadoClase = "por-vencer";
-                estadoTexto = "POR VENCER";
-                vigentes++;
-            } else {
-                vigentes++;
-            }
-            
             container.innerHTML += `
-                <div class="card ${estadoClase}">
+                <div class="card ${clase}">
                     <div>
-                        <div class="card-title" style="color:white; font-weight:bold;">${c.nombre}</div>
-                        <div class="card-date">Fecha límite: ${c.fecha}</div>
+                        <div style="color:white; font-weight:bold;">${c.nombre}</div>
+                        <div style="font-size:12px;">Fecha límite: ${c.fecha}</div>
                     </div>
-                    <div class="status ${estadoClase}">${estadoTexto}</div>
+                    <div class="status ${clase}">${texto}</div>
                 </div>
             `;
         });
-        document.getElementById('vigentes').innerText = "VIGENTES: " + vigentes;
-        document.getElementById('vencidos').innerText = "VENCIDOS: " + vencidos;
-    }
-</script>
+        document.getElementById('vigentes').innerText = "VIGENTES: " + vCount;
+        document.getElementById('vencidos').innerText = "VENCIDOS: " + vencCount;
+    </script>
 </body>
 </html>
