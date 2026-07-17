@@ -74,18 +74,36 @@
         { nombre: "Izaje / Rigger", fecha: "2025-09-12" }
     ];
 
+    // Al cargar la página, verificamos si hay una sesión válida de 30 min
+    window.onload = function() {
+        const sesionGuardada = localStorage.getItem('sesionNFC');
+        if (sesionGuardada) {
+            const tiempoTranscurrido = (Date.now() - parseInt(sesionGuardada)) / 1000 / 60;
+            if (tiempoTranscurrido < 30) {
+                mostrarContenido();
+            }
+        }
+    };
+
     function validar() {
         if(document.getElementById('pin').value === "1234") {
-            document.getElementById('bloqueo').style.display = 'none';
-            document.getElementById('contenido').style.display = 'block';
-            renderizar();
+            // Guardamos el momento exacto en localStorage para que persista al cerrar el navegador
+            localStorage.setItem('sesionNFC', Date.now());
+            mostrarContenido();
         } else { alert("Clave incorrecta"); }
+    }
+
+    function mostrarContenido() {
+        document.getElementById('bloqueo').style.display = 'none';
+        document.getElementById('contenido').style.display = 'block';
+        renderizar();
     }
 
     function renderizar() {
         const hoy = new Date(); hoy.setHours(0,0,0,0);
         let v = 0, venc = 0;
         let container = document.getElementById('lista-competencias');
+        container.innerHTML = ""; // Limpiar antes de renderizar
         
         comps.forEach(c => {
             let f = new Date(c.fecha);
@@ -110,5 +128,6 @@
         document.getElementById('vencidos').innerText = "VENCIDOS: " + venc;
     }
 </script>
+
 </body>
 </html>
