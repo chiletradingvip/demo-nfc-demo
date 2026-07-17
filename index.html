@@ -3,258 +3,103 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Perfil Trabajador NFC</title>
+    <title>Perfil de Trabajador</title>
     <style>
-        body { 
-            background-color: #1a2235; 
-            color: #a0b2c6; 
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
-            padding: 20px; 
-            margin: 0;
-        }
-        .session-banner {
-            background-color: #0b4a2e;
-            color: #2ecc71;
-            padding: 12px;
-            border-radius: 8px;
-            text-align: center;
-            font-size: 13px;
-            font-weight: bold;
-            margin-bottom: 25px;
-        }
-        .profile-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .profile-avatar {
-            background-color: #222e42;
-            font-size: 45px;
-            width: 75px;
-            height: 75px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 16px;
-            margin-right: 15px;
-        }
-        .profile-name {
-            font-size: 24px;
-            color: #ffffff;
-            font-weight: bold;
-            margin-bottom: 4px;
-        }
-        .profile-role {
-            font-size: 14px;
-            color: #5BA8DC;
-            font-weight: bold;
-        }
-        .header-row { 
-            display: flex; 
-            justify-content: space-between; 
-            margin-bottom: 15px; 
-        }
-        .header-col { 
-            flex: 1; 
-        }
-        .label { 
-            font-size: 11px; 
-            color: #6e84a3; 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px;
-        }
-        .value { 
-            font-size: 17px; 
-            color: #ffffff; 
-            margin-top: 4px; 
-            font-weight: 500;
-        }
-        .divider {
-            border-bottom: 1px solid #2a364f;
-            margin: 20px 0;
-        }
-        .counters { 
-            display: flex; 
-            gap: 10px; 
-            margin: 15px 0 15px 0; 
-        }
-        .badge-vigentes { 
-            background-color: #0b4a2e; 
-            color: #2ecc71; 
-            padding: 6px 12px; 
-            border-radius: 4px; 
-            font-weight: bold; 
-            font-size: 12px; 
-        }
-        .badge-vencidos { 
-            background-color: #5c1a1a; 
-            color: #e74c3c; 
-            padding: 6px 12px; 
-            border-radius: 4px; 
-            font-weight: bold; 
-            font-size: 12px; 
-        }
-        .card { 
-            background-color: #222e42; 
-            border-radius: 8px; 
-            padding: 18px; 
-            margin-bottom: 12px; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            border-left: 4px solid #2ecc71; 
-        }
-        .card.vencido { 
-            border-left-color: #e74c3c; 
-        }
-        .card-title { 
-            color: #ffffff; 
-            font-weight: bold; 
-            font-size: 15px; 
-            margin-bottom: 5px; 
-        }
-        .card-date { 
-            font-size: 12px; 
-            color: #a0b2c6; 
-        }
-        .status-badge { 
-            padding: 5px 10px; 
-            border-radius: 4px; 
-            font-size: 11px; 
-            font-weight: bold; 
-        }
-        .status-vigente { 
-            background-color: #0b4a2e; 
-            color: #2ecc71; 
-        }
-        .status-vencido { 
-            background-color: #5c1a1a; 
-            color: #e74c3c; 
-        }
-        .btn-close { 
-            background-color: #2c3a58; 
-            color: white; 
-            border: none; 
-            width: 100%; 
-            padding: 15px; 
-            border-radius: 8px; 
-            font-size: 16px; 
-            font-weight: bold; 
-            margin-top: 25px; 
-            cursor: pointer;
-        }
+        body { background-color: #0d1421; color: #a0b2c6; font-family: sans-serif; padding: 20px; margin: 0; }
+        .session-banner { background-color: #0b4a2e; color: #2ecc71; padding: 10px; border-radius: 8px; text-align: center; font-size: 13px; font-weight: bold; margin-bottom: 20px; }
+        .profile-header { display: flex; align-items: center; margin-bottom: 20px; }
+        .profile-avatar { font-size: 40px; margin-right: 15px; }
+        .profile-name { font-size: 20px; color: white; font-weight: bold; }
+        .profile-role { font-size: 14px; color: #5BA8DC; font-weight: bold; }
+        .grid-info { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .label { font-size: 10px; color: #6e84a3; text-transform: uppercase; }
+        .value { font-size: 16px; color: white; margin-top: 2px; }
+        .counters { display: flex; gap: 10px; margin-bottom: 20px; }
+        .badge { padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+        .card { background-color: #222e42; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #10b981; }
+        .card.vencido { border-left-color: #e74c3c; }
+        .status { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; background: #064e3b; color: #10b981; }
+        .status.vencido { background: #5c1a1a; color: #e74c3c; }
+        #bloqueo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d1421; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
     </style>
 </head>
 <body>
-    <div class="session-banner">Sesión activa: Jefatura validada (Expira en 30:00)</div>
 
+<div id="bloqueo">
+    <h1>Acceso Restringido</h1>
+    <p>Ingrese clave de jefatura para visualizar el perfil.</p>
+    <input type="password" id="pin" maxlength="4" placeholder="••••" style="padding:15px; border-radius:8px; border:none; text-align:center; font-size:20px;">
+    <br><button onclick="validar()">Desbloquear Perfil</button>
+</div>
+
+<div id="contenido" style="display:none;">
+    <div class="session-banner">Sesión activa: Jefatura validada (Expira en 30:00)</div>
+    
     <div class="profile-header">
         <div class="profile-avatar">👨‍🔧</div>
-        <div class="profile-info">
+        <div>
             <div class="profile-name">Daniel Ahumada</div>
             <div class="profile-role">Op. Grúa Horquilla</div>
         </div>
     </div>
 
-    <div class="divider"></div>
-
-    <div class="header-row">
-        <div class="header-col">
-            <div class="label">RUT</div>
-            <div class="value">12.345.678-9</div>
-        </div>
-        <div class="header-col">
-            <div class="label">N° SAP</div>
-            <div class="value">SAP-9844</div>
-        </div>
-    </div>
-    <div class="header-row">
-        <div class="header-col">
-            <div class="label">ÁREA</div>
-            <div class="value">Fundición</div>
-        </div>
-        <div class="header-col">
-            <div class="label">ACTUALIZADO</div>
-            <div class="value">Hace 1 min</div>
-        </div>
+    <div class="grid-info">
+        <div><div class="label">RUT</div><div class="value">12.345.678-9</div></div>
+        <div><div class="label">N° SAP</div><div class="value">SAP-9844</div></div>
+        <div><div class="label">ÁREA</div><div class="value">Fundición</div></div>
+        <div><div class="label">ACTUALIZADO</div><div class="value">Hace 1 min</div></div>
     </div>
 
-    <div class="label" style="margin-top: 25px;">COMPETENCIAS ASIGNADAS</div>
-    
+    <div class="label">COMPETENCIAS ASIGNADAS</div>
     <div class="counters">
-        <div class="badge-vigentes" id="contador-vigentes">VIGENTES: 0</div>
-        <div class="badge-vencidos" id="contador-vencidos">VENCIDOS: 0</div>
+        <div class="badge" style="background:#0b4a2e; color:#2ecc71;" id="vigentes">VIGENTES: 0</div>
+        <div class="badge" style="background:#5c1a1a; color:#e74c3c;" id="vencidos">VENCIDOS: 0</div>
     </div>
 
-    <div class="divider" style="margin-top: 5px;"></div>
-
-    <!-- Contenedor donde JavaScript inyectará las tarjetas -->
     <div id="lista-competencias"></div>
+    <button class="btn-close" style="width:100%; padding:15px; border-radius:8px; border:none; margin-top:20px; cursor:pointer;" onclick="location.reload()">Cerrar Perfil</button>
+</div>
 
-    <button class="btn-close" onclick="window.close()">Cerrar Perfil</button>
+<script>
+    const competencias = [
+        { nombre: "Examen Ocupacional", fecha: "2026-12-15" },
+        { nombre: "Licencia Interna", fecha: "2025-05-20" },
+        { nombre: "Trabajo en Altura", fecha: "2027-03-10" },
+        { nombre: "Uso de Extintores", fecha: "2026-08-01" },
+        { nombre: "Izaje / Rigger", fecha: "2025-09-12" }
+    ];
 
-    <script>
-        // Tus datos de prueba
-        const competencias = [
-            { nombre: "Examen Ocupacional", fechaStr: "15 dic 2026" },
-            { nombre: "Licencia Interna", fechaStr: "20 may 2025" },
-            { nombre: "Trabajo en Altura", fechaStr: "10 mar 2027" },
-            { nombre: "Uso de Extintores", fechaStr: "01 ago 2026" },
-            { nombre: "Izaje / Rigger", fechaStr: "12 sep 2025" }
-        ];
+    function validar() {
+        if(document.getElementById('pin').value === "1234") {
+            document.getElementById('bloqueo').style.display = 'none';
+            document.getElementById('contenido').style.display = 'block';
+            renderizar();
+        } else { alert("Clave incorrecta"); }
+    }
 
-        // Diccionario para que JavaScript entienda los meses en español
-        const mesesMap = { 
-            "ene":0, "feb":1, "mar":2, "abr":3, "may":4, "jun":5, 
-            "jul":6, "ago":7, "sep":8, "oct":9, "nov":10, "dic":11 
-        };
-
-        let vigentesCount = 0;
-        let vencidosCount = 0;
-
-        const listaDiv = document.getElementById('lista-competencias');
+    function renderizar() {
+        const hoy = new Date(); hoy.setHours(0,0,0,0);
+        let vigentes = 0, vencidos = 0;
+        let container = document.getElementById('lista-competencias');
         
-        // Obtenemos la fecha exacta de hoy (Julio 2026)
-        const hoy = new Date();
-        hoy.setHours(0, 0, 0, 0);
-
-        competencias.forEach(comp => {
-            // Transformar "15 dic 2026" en algo que la máquina pueda procesar
-            let partes = comp.fechaStr.toLowerCase().split(" ");
-            let dia = parseInt(partes[0], 10);
-            let mes = mesesMap[partes[1]];
-            let anio = parseInt(partes[2], 10);
+        competencias.forEach(c => {
+            let fechaVenc = new Date(c.fecha);
+            let estaVencido = fechaVenc < hoy;
+            if(estaVencido) vencidos++; else vigentes++;
             
-            let fechaLimite = new Date(anio, mes, dia);
-            
-            // LA MAGIA: Compara si la fecha límite ya pasó
-            let estaVencido = fechaLimite < hoy;
-
-            if (estaVencido) {
-                vencidosCount++;
-            } else {
-                vigentesCount++;
-            }
-
-            // Construimos la tarjeta visualmente
-            let div = document.createElement('div');
-            div.className = 'card ' + (estaVencido ? 'vencido' : '');
-            
-            div.innerHTML = `
-                <div>
-                    <div class="card-title">${comp.nombre}</div>
-                    <div class="card-date">Fecha límite: ${comp.fechaStr}</div>
-                </div>
-                <div class="status-badge ${estaVencido ? 'status-vencido' : 'status-vigente'}">
-                    ${estaVencido ? 'VENCIDO' : 'VIGENTE'}
+            container.innerHTML += `
+                <div class="card ${estaVencido ? 'vencido' : ''}">
+                    <div>
+                        <div class="card-title" style="color:white; font-weight:bold;">${c.nombre}</div>
+                        <div class="card-date">Fecha límite: ${c.fecha}</div>
+                    </div>
+                    <div class="status ${estaVencido ? 'vencido' : ''}">${estaVencido ? 'VENCIDO' : 'VIGENTE'}</div>
                 </div>
             `;
-            listaDiv.appendChild(div);
         });
-
-        // Actualizamos los contadores superiores
-        document.getElementById('contador-vigentes').innerText = 'VIGENTES: ' + vigentesCount;
-        document.getElementById('contador-vencidos').innerText = 'VENCIDOS: ' + vencidosCount;
-    </script>
+        document.getElementById('vigentes').innerText = "VIGENTES: " + vigentes;
+        document.getElementById('vencidos').innerText = "VENCIDOS: " + vencidos;
+    }
+</script>
 </body>
 </html>
