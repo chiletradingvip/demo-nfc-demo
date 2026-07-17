@@ -3,339 +3,209 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Control de Acceso NFC</title>
+    <title>Perfil Trabajador NFC</title>
     <style>
-        /* Estilos base: Diseño Oscuro optimizado para terreno */
-        :root {
-            --bg-main: #0f172a;
-            --bg-card: #1e293b;
-            --text-main: #f8fafc;
-            --text-muted: #94a3b8;
-            --accent-blue: #3b82f6;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --danger: #ef4444;
-        }
-
-        body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-main);
-            color: var(--text-main);
+        body { 
+            background-color: #1a2235; 
+            color: #a0b2c6; 
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; 
+            padding: 20px; 
             margin: 0;
-            padding: 15px;
-            display: flex;
-            justify-content: center;
         }
-
-        .container {
-            width: 100%;
-            max-width: 400px;
+        .header-row { 
+            display: flex; 
+            justify-content: space-between; 
+            margin-bottom: 15px; 
         }
-
-        /* Pantalla de Bloqueo (Login) */
-        #login-screen {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 80vh;
-            text-align: center;
+        .header-col { 
+            flex: 1; 
         }
-
-        .pin-input {
-            background-color: var(--bg-card);
-            border: 1px solid #334155;
-            color: white;
-            padding: 15px;
-            border-radius: 8px;
-            font-size: 24px;
-            width: 80%;
-            text-align: center;
-            letter-spacing: 10px;
-            margin-bottom: 20px;
-        }
-
-        .btn {
-            background-color: var(--accent-blue);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 8px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            width: 80%;
-        }
-
-        /* Pantalla del Perfil */
-        #profile-screen {
-            display: none;
-            background-color: var(--bg-card);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 15px;
-            margin-bottom: 15px;
-        }
-
-        .avatar {
-            font-size: 40px;
-            background: #0f172a;
-            padding: 10px;
-            border-radius: 12px;
-            margin-right: 15px;
-        }
-
-        .info-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-
-        .label {
-            font-size: 12px;
-            color: var(--text-muted);
-            text-transform: uppercase;
+        .label { 
+            font-size: 11px; 
+            color: #6e84a3; 
+            text-transform: uppercase; 
             letter-spacing: 0.5px;
         }
-
-        .value {
-            font-size: 16px;
-            font-family: monospace;
-            margin-top: 5px;
-            color: #e2e8f0;
+        .value { 
+            font-size: 17px; 
+            color: #ffffff; 
+            margin-top: 4px; 
+            font-weight: 500;
         }
-
-        /* Tarjetas de Cursos */
-        .course-card {
-            background-color: var(--bg-main);
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 10px;
-            border-left: 4px solid #334155;
+        .divider {
+            border-bottom: 1px solid #2a364f;
+            margin: 20px 0;
         }
-
-        .course-card.VIGENTE { border-left-color: var(--success); }
-        .course-card.VENCIDO { border-left-color: var(--danger); }
-        .course-card.POR_VENCER { border-left-color: var(--warning); }
-        .course-card.RESTRICCION { border-left-color: var(--warning); }
-
-        .course-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 5px;
+        .counters { 
+            display: flex; 
+            gap: 10px; 
+            margin: 15px 0 20px 0; 
         }
-
-        .badge {
-            font-size: 10px;
-            font-weight: bold;
-            padding: 4px 8px;
-            border-radius: 20px;
+        .badge-vigentes { 
+            background-color: #0b4a2e; 
+            color: #2ecc71; 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+            font-weight: bold; 
+            font-size: 12px; 
         }
-
-        .badge.bg-VIGENTE { background-color: #064e3b; color: #6ee7b7; }
-        .badge.bg-VENCIDO { background-color: #7f1d1d; color: #fca5a5; }
-        .badge.bg-POR_VENCER { background-color: #78350f; color: #fcd34d; }
-        .badge.bg-RESTRICCION { background-color: #78350f; color: #fcd34d; }
-        
-        .session-banner {
-            background-color: #064e3b;
-            color: #6ee7b7;
-            text-align: center;
-            padding: 8px;
-            border-radius: 8px;
-            font-size: 12px;
-            margin-bottom: 15px;
+        .badge-vencidos { 
+            background-color: #5c1a1a; 
+            color: #e74c3c; 
+            padding: 6px 12px; 
+            border-radius: 4px; 
+            font-weight: bold; 
+            font-size: 12px; 
         }
-
-        #resumen-conteo {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            font-size: 11px;
-            font-weight: bold;
+        .card { 
+            background-color: #222e42; 
+            border-radius: 8px; 
+            padding: 18px; 
+            margin-bottom: 12px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-left: 4px solid #2ecc71; 
+        }
+        .card.vencido { 
+            border-left-color: #e74c3c; 
+        }
+        .card-title { 
+            color: #ffffff; 
+            font-weight: bold; 
+            font-size: 15px; 
+            margin-bottom: 5px; 
+        }
+        .card-date { 
+            font-size: 12px; 
+            color: #a0b2c6; 
+        }
+        .status-badge { 
+            padding: 5px 10px; 
+            border-radius: 4px; 
+            font-size: 11px; 
+            font-weight: bold; 
+        }
+        .status-vigente { 
+            background-color: #0b4a2e; 
+            color: #2ecc71; 
+        }
+        .status-vencido { 
+            background-color: #5c1a1a; 
+            color: #e74c3c; 
+        }
+        .btn-close { 
+            background-color: #2c3a58; 
+            color: white; 
+            border: none; 
+            width: 100%; 
+            padding: 15px; 
+            border-radius: 8px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            margin-top: 25px; 
+            cursor: pointer;
         }
     </style>
 </head>
 <body>
-
-<div class="container">
-    <!-- PANTALLA DE BLOQUEO -->
-    <div id="login-screen">
-        <h2 style="color: var(--text-main);">Acceso Restringido</h2>
-        <p style="color: var(--text-muted); margin-bottom: 30px;">Ingrese clave de jefatura para visualizar el perfil escaneado.</p>
-        <input type="password" id="pin-input" class="pin-input" placeholder="••••" maxlength="4" pattern="\d*">
-        <button class="btn" onclick="validarAcceso()">Desbloquear Perfil</button>
-    </div>
-
-    <!-- PANTALLA DE PERFIL DEL TRABAJADOR -->
-    <div id="profile-screen">
-        <div class="session-banner">
-            Sesión activa: Jefatura validada (Expira en 30:00)
+    <div class="header-row">
+        <div class="header-col">
+            <div class="label">RUT</div>
+            <div class="value">12.345.678-9</div>
         </div>
-
-        <div class="header">
-            <div class="avatar">👷</div>
-            <div>
-                <h2 id="ui-nombre" style="margin: 0; color: white;">Cargando...</h2>
-                <div id="ui-cargo" style="color: var(--accent-blue); font-size: 14px; font-weight: bold; margin-top: 5px;"></div>
-            </div>
-        </div>
-
-        <div class="info-grid">
-            <div>
-                <div class="label">RUT</div>
-                <div id="ui-rut" class="value"></div>
-            </div>
-            <div>
-                <div class="label">N° SAP</div>
-                <div id="ui-sap" class="value"></div>
-            </div>
-            <div>
-                <div class="label">Área</div>
-                <div id="ui-area" class="value"></div>
-            </div>
-            <div>
-                <div class="label">Actualizado</div>
-                <div class="value" style="font-size: 14px;">Hace 1 min</div>
-            </div>
-        </div>
-
-        <div style="margin: 20px 0 10px 0; border-bottom: 1px solid #334155; padding-bottom: 10px;">
-            <div style="display: flex; justify-content: space-between; align-items: center;">
-                <span class="label">Competencias Asignadas</span>
-            </div>
-            <!-- Conteo automático de cursos -->
-            <div id="resumen-conteo"></div>
-        </div>
-
-        <!-- Contenedor donde se dibujarán los cursos dinámicamente -->
-        <div id="lista-cursos"></div>
-        
-        <div style="text-align: center; margin-top: 20px; border-top: 1px solid #334155; padding-top: 15px;">
-            <button class="btn" style="background-color: #334155; width: 100%; font-size: 14px;" onclick="cerrarSesion()">Cerrar Perfil</button>
+        <div class="header-col">
+            <div class="label">N° SAP</div>
+            <div class="value">SAP-9844</div>
         </div>
     </div>
-</div>
+    <div class="header-row">
+        <div class="header-col">
+            <div class="label">ÁREA</div>
+            <div class="value">Fundición</div>
+        </div>
+        <div class="header-col">
+            <div class="label">ACTUALIZADO</div>
+            <div class="value">Hace 1 min</div>
+        </div>
+    </div>
 
-<script>
-    // --- 1. SIMULADOR DE BASE DE DATOS (Fila de Excel de Daniel Ahumada) ---
-    const trabajadorDB = {
-        nombre: "Daniel Ahumada",
-        cargo: "Op. Grúa Horquilla",
-        rut: "12.345.678-9",
-        sap: "SAP-9844",
-        area: "Fundición",
-        cursos: [
-            { nombre: "Examen Ocupacional", estado: "VIGENTE", vence: "15 dic 2026" },
-            { nombre: "Licencia Interna", estado: "VIGENTE", vence: "20 may 2025" },
-            { nombre: "Trabajo en Altura", estado: "VIGENTE", vence: "10 mar 2027" },
-            { nombre: "Uso de Extintores", estado: "VIGENTE", vence: "01 ago 2026" },
-            { nombre: "Izaje / Rigger", estado: "VIGENTE", vence: "12 sep 2025" }
-            // Nota: Espacios Confinados era N/A en tu Excel, por lo que el sistema 
-            // simplemente no lo trae de la base de datos para no ensuciar la pantalla.
-        ]
-    };
+    <div class="label" style="margin-top: 25px;">COMPETENCIAS ASIGNADAS</div>
+    
+    <div class="counters">
+        <div class="badge-vigentes" id="contador-vigentes">VIGENTES: 0</div>
+        <div class="badge-vencidos" id="contador-vencidos">VENCIDOS: 0</div>
+    </div>
 
-    let sessionTimeout;
+    <div class="divider"></div>
 
-    // --- 2. LÓGICA DE ACCESO ---
-    function validarAcceso() {
-        const pin = document.getElementById('pin-input').value;
-        if (pin === "1234") { 
-            iniciarSesion();
-        } else {
-            alert("Clave de jefatura incorrecta.");
-            document.getElementById('pin-input').value = "";
-        }
-    }
+    <!-- Contenedor donde JavaScript inyectará las tarjetas -->
+    <div id="lista-competencias"></div>
 
-    function iniciarSesion() {
-        document.getElementById('login-screen').style.display = 'none';
-        document.getElementById('profile-screen').style.display = 'block';
+    <button class="btn-close" onclick="window.close()">Cerrar Perfil</button>
+
+    <script>
+        // Tus datos de prueba
+        const competencias = [
+            { nombre: "Examen Ocupacional", fechaStr: "15 dic 2026" },
+            { nombre: "Licencia Interna", fechaStr: "20 may 2025" },
+            { nombre: "Trabajo en Altura", fechaStr: "10 mar 2027" },
+            { nombre: "Uso de Extintores", fechaStr: "01 ago 2026" },
+            { nombre: "Izaje / Rigger", fechaStr: "12 sep 2025" }
+        ];
+
+        // Diccionario para que JavaScript entienda los meses en español
+        const mesesMap = { 
+            "ene":0, "feb":1, "mar":2, "abr":3, "may":4, "jun":5, 
+            "jul":6, "ago":7, "sep":8, "oct":9, "nov":10, "dic":11 
+        };
+
+        let vigentesCount = 0;
+        let vencidosCount = 0;
+
+        const listaDiv = document.getElementById('lista-competencias');
         
-        // Guardar la sesión temporal
-        localStorage.setItem('jefatura_auth', 'valid_token');
-        localStorage.setItem('auth_time', Date.now());
+        // Obtenemos la fecha exacta de hoy y borramos las horas/minutos para que solo compare el día
+        const hoy = new Date();
+        hoy.setHours(0, 0, 0, 0);
 
-        clearTimeout(sessionTimeout);
-        sessionTimeout = setTimeout(cerrarSesion, 1800000);
-        
-        // Llamar a la función que dibuja los datos
-        cargarDatosTrabajador();
-    }
+        competencias.forEach(comp => {
+            // Transformar "15 dic 2026" en algo que la máquina pueda procesar
+            let partes = comp.fechaStr.toLowerCase().split(" ");
+            let dia = parseInt(partes[0], 10);
+            let mes = mesesMap[partes[1]];
+            let anio = parseInt(partes[2], 10);
+            
+            let fechaLimite = new Date(anio, mes, dia);
+            
+            // LA MAGIA: Compara si la fecha límite ya pasó
+            let estaVencido = fechaLimite < hoy;
 
-    function cerrarSesion() {
-        localStorage.removeItem('jefatura_auth');
-        localStorage.removeItem('auth_time');
-        document.getElementById('login-screen').style.display = 'flex';
-        document.getElementById('profile-screen').style.display = 'none';
-        document.getElementById('pin-input').value = "";
-    }
+            if (estaVencido) {
+                vencidosCount++;
+            } else {
+                vigentesCount++;
+            }
 
-    // --- 3. LÓGICA PARA DIBUJAR LOS DATOS (Igual a como lo hace una app real) ---
-    function cargarDatosTrabajador() {
-        // Llenar datos personales
-        document.getElementById('ui-nombre').innerText = trabajadorDB.nombre;
-        document.getElementById('ui-cargo').innerText = trabajadorDB.cargo;
-        document.getElementById('ui-rut').innerText = trabajadorDB.rut;
-        document.getElementById('ui-sap').innerText = trabajadorDB.sap;
-        document.getElementById('ui-area').innerText = trabajadorDB.area;
-
-        // Llenar la lista de cursos dinámicamente
-        const contenedorCursos = document.getElementById('lista-cursos');
-        contenedorCursos.innerHTML = ""; // Limpiar contenedor
-        
-        let conteoVigentes = 0;
-        let conteoVencidos = 0;
-
-        trabajadorDB.cursos.forEach(curso => {
-            // Contabilizar para el resumen
-            if (curso.estado === "VIGENTE") conteoVigentes++;
-            if (curso.estado === "VENCIDO") conteoVencidos++;
-
-            // Crear el bloque de código HTML (Tarjeta) para cada curso
-            const tarjeta = `
-                <div class="course-card ${curso.estado}">
-                    <div class="course-header">
-                        <strong style="color: white; font-size: 15px;">${curso.nombre}</strong>
-                        <span class="badge bg-${curso.estado}">${curso.estado}</span>
-                    </div>
-                    <div style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Fecha límite: ${curso.vence}</div>
+            // Construimos la tarjeta visualmente
+            let div = document.createElement('div');
+            div.className = 'card ' + (estaVencido ? 'vencido' : '');
+            
+            div.innerHTML = `
+                <div>
+                    <div class="card-title">${comp.nombre}</div>
+                    <div class="card-date">Fecha límite: ${comp.fechaStr}</div>
+                </div>
+                <div class="status-badge ${estaVencido ? 'status-vencido' : 'status-vigente'}">
+                    ${estaVencido ? 'VENCIDO' : 'VIGENTE'}
                 </div>
             `;
-            // Insertar la tarjeta en la pantalla
-            contenedorCursos.innerHTML += tarjeta;
+            listaDiv.appendChild(div);
         });
 
-        // Dibujar los contadores superiores
-        document.getElementById('resumen-conteo').innerHTML = `
-            <span style="color: #6ee7b7; background: #064e3b; padding: 4px 8px; border-radius: 4px;">VIGENTES: ${conteoVigentes}</span>
-            <span style="color: #fca5a5; background: #7f1d1d; padding: 4px 8px; border-radius: 4px;">VENCIDOS: ${conteoVencidos}</span>
-        `;
-    }
-
-    // --- 4. VERIFICACIÓN DE SESIÓN AL ENTRAR ---
-    window.onload = function() {
-        const authTime = localStorage.getItem('auth_time');
-        if (authTime) {
-            const tiempoTranscurrido = Date.now() - parseInt(authTime);
-            if (tiempoTranscurrido < 1800000) {
-                iniciarSesion(); 
-            } else {
-                cerrarSesion();
-            }
-        }
-    };
-</script>
-
+        // Actualizamos los contadores superiores
+        document.getElementById('contador-vigentes').innerText = 'VIGENTES: ' + vigentesCount;
+        document.getElementById('contador-vencidos').innerText = 'VENCIDOS: ' + vencidosCount;
+    </script>
 </body>
 </html>
