@@ -16,10 +16,16 @@
         .value { font-size: 16px; color: white; margin-top: 2px; }
         .counters { display: flex; gap: 10px; margin-bottom: 20px; }
         .badge { padding: 6px 12px; border-radius: 4px; font-weight: bold; font-size: 12px; }
+        
+        /* Estilos de tarjetas según estado */
         .card { background-color: #222e42; padding: 15px; margin-bottom: 10px; border-radius: 8px; display: flex; justify-content: space-between; align-items: center; border-left: 4px solid #10b981; }
-        .card.vencido { border-left-color: #e74c3c; }
+        .card.vencido { border-left-color: #ef4444; }
+        .card.por-vencer { border-left-color: #f59e0b; }
+        
         .status { padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; background: #064e3b; color: #10b981; }
-        .status.vencido { background: #5c1a1a; color: #e74c3c; }
+        .status.vencido { background: #5c1a1a; color: #ef4444; }
+        .status.por-vencer { background: #78350f; color: #f59e0b; }
+        
         #bloqueo { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #0d1421; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 100; }
     </style>
 </head>
@@ -78,22 +84,36 @@
     }
 
     function renderizar() {
-        const hoy = new Date(); hoy.setHours(0,0,0,0);
+        const hoy = new Date();
         let vigentes = 0, vencidos = 0;
         let container = document.getElementById('lista-competencias');
         
         competencias.forEach(c => {
             let fechaVenc = new Date(c.fecha);
-            let estaVencido = fechaVenc < hoy;
-            if(estaVencido) vencidos++; else vigentes++;
+            let diasRestantes = Math.ceil((fechaVenc - hoy) / (1000 * 60 * 60 * 24));
+            
+            let estadoClase = "";
+            let estadoTexto = "VIGENTE";
+
+            if (diasRestantes < 0) {
+                estadoClase = "vencido";
+                estadoTexto = "VENCIDO";
+                vencidos++;
+            } else if (diasRestantes <= 30) {
+                estadoClase = "por-vencer";
+                estadoTexto = "POR VENCER";
+                vigentes++;
+            } else {
+                vigentes++;
+            }
             
             container.innerHTML += `
-                <div class="card ${estaVencido ? 'vencido' : ''}">
+                <div class="card ${estadoClase}">
                     <div>
                         <div class="card-title" style="color:white; font-weight:bold;">${c.nombre}</div>
                         <div class="card-date">Fecha límite: ${c.fecha}</div>
                     </div>
-                    <div class="status ${estaVencido ? 'vencido' : ''}">${estaVencido ? 'VENCIDO' : 'VIGENTE'}</div>
+                    <div class="status ${estadoClase}">${estadoTexto}</div>
                 </div>
             `;
         });
